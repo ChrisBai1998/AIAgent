@@ -6,7 +6,6 @@ import sqlite3
 import webbrowser
 from openai import OpenAI
 
-
 # Initialize Dash app with Bootstrap stylesheet
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
 
@@ -14,80 +13,87 @@ client = OpenAI(
     api_key='7bb6b5cb-cc26-488c-a436-604cacd9a4d3',
     base_url="https://ark.cn-beijing.volces.com/api/v3",
 )
-# Custom CSS for a dungeon-like aesthetic
+
+# Custom CSS for a roguelike dungeon pixel aesthetic
 custom_css = {
     "container": {
-        "backgroundColor": "#121212",
-        "color": "white",
-        "fontFamily": "Courier New, monospace",
+        "backgroundColor": "#0d0d0d",
+        "color": "#e0e0e0",
+        "fontFamily": "Press Start 2P, monospace",
         "padding": "20px",
+        "border": "2px solid #ff4500",
+        "borderRadius": "10px",
+        "boxShadow": "0 0 20px #ff4500",
     },
     "ca_header": {
-        "color": "white",  # 修改文字颜色为白色
+        "color": "#e0e0e0",
         "fontSize": "14px",
         "fontWeight": "bold",
-        "textAlign": "left",  # 修改位置为左对齐
+        "textAlign": "left",
         "marginBottom": "10px",
-        "textShadow": "0 0 10px #FFEB3B",
-        "backgroundColor": "blue",  # 修改背景颜色为蓝色
-        "padding": "5px",  # 添加一些内边距
-        "borderRadius": "5px",  # 添加圆角
+        "textShadow": "0 0 10px #ff4500",
+        "backgroundColor": "#1a1a1a",
+        "padding": "10px",
+        "borderRadius": "5px",
+        "border": "1px solid #ff4500",
     },
     "header": {
-        "color": "#AB47BC",
-        "fontSize": "24px",
+        "color": "#ff4500",
+        "fontSize": "32px",
         "fontWeight": "bold",
         "textAlign": "center",
         "marginBottom": "20px",
-        "textShadow": "0 0 10px #AB47BC",
+        "textShadow": "0 0 10px #ff4500",
     },
     "content": {
         "margin": "0 auto",
-        "maxWidth": "600px",
+        "maxWidth": "800px",
         "textAlign": "center",
     },
     "button": {
-        "backgroundColor": "#8E24AA",
-        "color": "white",
+        "backgroundColor": "#ff4500",
+        "color": "#e0e0e0",
         "padding": "10px 20px",
         "border": "none",
         "borderRadius": "5px",
         "cursor": "pointer",
-        "boxShadow": "0 0 10px #AB47BC",
+        "boxShadow": "0 0 10px #ff4500",
         "textTransform": "uppercase",
+        "margin": "5px",
     },
     "dropdown": {
-        "backgroundColor": "#2E2E2E",  # 修改背景颜色
-        "color": "#FFFFFF",
-        "border": "1px solid #AB47BC",
+        "backgroundColor": "#1a1a1a",
+        "color": "#e0e0e0",
+        "border": "1px solid #ff4500",
         "borderRadius": "5px",
-        "width": "200px",  # 设置宽度
-        "padding": "5px",  # 添加内边距
+        "width": "200px",
+        "padding": "5px",
     },
     "textbox": {
-        "backgroundColor": "#1E1E1E",
-        "color": "#76FF03",
+        "backgroundColor": "#1a1a1a",
+        "color": "#76ff03",
         "padding": "10px",
-        "border": "1px solid #6a1b9a",
+        "border": "1px solid #ff4500",
         "borderRadius": "5px",
         "fontSize": "16px",
-        "boxShadow": "inset 0 0 10px #6a1b9a",
+        "boxShadow": "inset 0 0 10px #ff4500",
         "marginTop": "20px",
-        "height": "auto",  # 自动高度
-        "overflowY": "visible",  # 使内容可见
+        "height": "auto",
+        "overflowY": "auto",
+        "maxHeight": "400px",
     },
     "icon_button": {
-        "backgroundColor": "#6a1b9a",
-        "color": "white",
+        "backgroundColor": "#ff4500",
+        "color": "#e0e0e0",
         "border": "none",
         "borderRadius": "50%",
         "padding": "5px 10px",
         "marginLeft": "5px",
         "cursor": "pointer",
-        "boxShadow": "0 0 10px #AB47BC",
+        "boxShadow": "0 0 10px #ff4500",
     },
     "link": {
-        "color": "#FFFFFF",
+        "color": "#e0e0e0",
         "textDecoration": "none",
         "fontSize": "16px",
         "marginLeft": "10px",
@@ -103,6 +109,9 @@ app.layout = html.Div(
 
         # Main Header Section
         html.Div("S.I.N TERMINAL", style=custom_css["header"]),
+
+        # Banner Image
+        html.Img(src="/assets/banner.png", style={"width": "100%", "borderRadius": "10px", "marginBottom": "20px"}),
 
         # Content Section (centered)
         html.Div(
@@ -141,21 +150,21 @@ app.layout = html.Div(
                             children=[
                                 html.H4(
                                     "Money Gun: Because Who Needs a Loan When You Can Shoot?",
-                                    style={"color": "#FFEB3B"},
+                                    style={"color": "#ff4500"},
                                 ),
                                 html.P(
                                     "GAME ROLE: You're here to pitch The Infinite Toaster™. A toaster that only toasts the concept of bread. Meta and pointless. You're seeking to raise $500,000.",
-                                    style={"color": "#FFFFFF"},
+                                    style={"color": "#e0e0e0"},
                                 ),
                                 html.P(
                                     "[11:05:05 PM] User: I have a gun that shoots money. It is magic and I don't know where it came from but it's mine, I can prove it. And I will give you money for favors.",
-                                    style={"color": "#76FF03"},
+                                    style={"color": "#76ff03"},
                                 ),
                                 html.P(
                                     "[11:05:05 PM] Shark: [Mark Crude-an]: 'I'm out immediately. Not only is this clearly nonsense, but it sounds like you're trying to pitch us stolen property or some kind of counterfeit operation. I don't look good in prison orange.'",
-                                    style={"color": "#F44336"},
+                                    style={"color": "#ff4500"},
                                 ),
-                                html.P("Outcome: LOSS", style={"color": "#F44336", "fontWeight": "bold"}),
+                                html.P("Outcome: LOSS", style={"color": "#ff4500", "fontWeight": "bold"}),
                             ],
                         ),
                     ],
@@ -171,8 +180,8 @@ app.layout = html.Div(
                                     type="text",
                                     placeholder="输入你的命令...",
                                     style={"width": "80%", "padding": "10px", "borderRadius": "5px",
-                                           "border": "1px solid #6a1b9a", "color": "#FFFFFF",
-                                           "backgroundColor": "#1E1E1E"},
+                                           "border": "1px solid #ff4500", "color": "#e0e0e0",
+                                           "backgroundColor": "#1a1a1a"},
                                 ),
                                 html.Button(
                                     "提交",
@@ -204,18 +213,35 @@ app.layout = html.Div(
                             id="whitepaper-button",
                             n_clicks=0,
                             style=custom_css["button"],
-                        ),html.Button(
+                        ),
+                        html.Button(
                             "GitHub",
                             id="github-button",
                             n_clicks=0,
                             style=custom_css["button"],
                         ),
-
+                        html.Button(
+                            id="twitter-button",
+                            n_clicks=0,
+                            style={**custom_css["button"], "backgroundColor": "#1DA1F2", "display": "flex", "alignItems": "center"},
+                            children=[
+                                html.Img(src="/assets/twitter-logo.jpg", style={"width": "20px", "marginRight": "5px"}),
+                                "Twitter"
+                            ],
+                        ),
+                        html.Button(
+                            "Connect Wallet",
+                            id="connect-wallet-button",
+                            n_clicks=0,
+                            style={**custom_css["button"], "backgroundColor": "#FF5722"},
+                        ),
                     ],
                 ),
                 # Placeholder for whitepaper output
                 html.Div(id="whitepaper-output", style={"marginTop": "20px", "color": "white"}),
                 html.Div(id="github-output", style={"marginTop": "20px", "color": "white"}),
+                html.Div(id="twitter-output", style={"marginTop": "20px", "color": "white"}),
+                html.Div(id="connect-wallet-output", style={"marginTop": "20px", "color": "white"}),
             ],
         ),
 
@@ -242,11 +268,11 @@ app.layout = html.Div(
     Input("submit-button", "n_clicks"),
     State("user-input", "value"),
 )
-
 def new_game_or_user_input(new_game_clicks, submit_clicks, user_input):
-    history =  [
+    history = [
         {"role": "system",
-         "content": "想象你是一个地牢游戏的掌控者，现在需要你根据用户描述给出下一步可能出现的场景和选项供用户选择，用户原始生命值为10，武力值为0，如果遇到武力值比他高的怪物扣除两点生命值，用户在游玩过程中会捡到武器.用户赢的条件为找到宝藏，用户生命值为0时，游戏结束."}]
+         "content": "想象你是一个地牢游戏的掌控者，现在需要你根据用户描述给出下一步可能出现的场景和选项供用户选择，用户原始生命值为10，武力值为0，如果遇到武力值比他高的怪物扣除两点生命值，用户在游玩过程中会捡到武器.用户赢的条件为找到宝藏，用户生命值为0时，游戏结束."}
+    ]
     history.append({"role": "user", "content": '现在生成初始场景，并给出下一步选项'})
     game_logs = [
         html.Div(
@@ -254,21 +280,21 @@ def new_game_or_user_input(new_game_clicks, submit_clicks, user_input):
             children=[
                 html.H4(
                     "Money Gun: Because Who Needs a Loan When You Can Shoot?",
-                    style={"color": "#FFEB3B"},
+                    style={"color": "#ff4500"},
                 ),
                 html.P(
                     "GAME ROLE: You're here to pitch The Infinite Toaster™. A toaster that only toasts the concept of bread. Meta and pointless. You're seeking to raise $500,000.",
-                    style={"color": "#FFFFFF"},
+                    style={"color": "#e0e0e0"},
                 ),
                 html.P(
                     "[11:05:05 PM] User: I have a gun that shoots money. It is magic and I don't know where it came from but it's mine, I can prove it. And I will give you money for favors.",
-                    style={"color": "#76FF03"},
+                    style={"color": "#76ff03"},
                 ),
                 html.P(
                     "[11:05:05 PM] Shark: [Mark Crude-an]: 'I'm out immediately. Not only is this clearly nonsense, but it sounds like you're trying to pitch us stolen property or some kind of counterfeit operation. I don't look good in prison orange.'",
-                    style={"color": "#F44336"},
+                    style={"color": "#ff4500"},
                 ),
-                html.P("Outcome: LOSS", style={"color": "#F44336", "fontWeight": "bold"}),
+                html.P("Outcome: LOSS", style={"color": "#ff4500", "fontWeight": "bold"}),
             ],
         ),
     ]
@@ -282,7 +308,7 @@ def new_game_or_user_input(new_game_clicks, submit_clicks, user_input):
         ai_response = completion.choices[0].message.content
         history.append({"role": "assistant", "content": ai_response})
         # Add the user's input and AI's response to the game logs
-        game_logs.append(html.P(f"[AI]: {ai_response}", style={"color": "#AB47BC"}))
+        game_logs.append(html.P(f"[AI]: {ai_response}", style={"color": "#ff4500"}))
 
     if submit_clicks > 0:
         if user_input:
@@ -299,11 +325,11 @@ def new_game_or_user_input(new_game_clicks, submit_clicks, user_input):
             history.append({"role": "assistant", "content": ai_response})
 
             # Add the user's input and AI's response to the game logs
-            game_logs.append(html.P(f"[User]: {user_input}", style={"color": "#76FF03"}))
-            game_logs.append(html.P(f"[AI]: {ai_response}", style={"color": "#AB47BC"}))
-
+            game_logs.append(html.P(f"[User]: {user_input}", style={"color": "#76ff03"}))
+            game_logs.append(html.P(f"[AI]: {ai_response}", style={"color": "#ff4500"}))
 
     return "", game_logs
+
 # Callback to toggle modal
 @app.callback(
     Output("modal", "is_open"),
@@ -352,6 +378,31 @@ def open_github(n_clicks):
         webbrowser.open_new_tab("https://github.com/ChrisBai1998/AIAgent")
         return "GitHub opened in a new tab."
     return no_update
+
+# Callback to open Twitter
+@app.callback(
+    Output("twitter-output", "children"),
+    Input("twitter-button", "n_clicks"),
+    prevent_initial_call=True
+)
+def open_twitter(n_clicks):
+    if n_clicks > 0:
+        webbrowser.open_new_tab("https://twitter.com")
+        return "Twitter opened in a new tab."
+    return no_update
+
+# Callback to connect wallet
+@app.callback(
+    Output("connect-wallet-output", "children"),
+    Input("connect-wallet-button", "n_clicks"),
+    prevent_initial_call=True
+)
+def connect_wallet(n_clicks):
+    if n_clicks > 0:
+        # Add your wallet connection logic here
+        return "Wallet connected."
+    return no_update
+
 # Run the app
 if __name__ == "__main__":
     app.run_server(debug=True, host='0.0.0.0', port=8051)
