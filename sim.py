@@ -111,7 +111,7 @@ app.layout = html.Div(
         html.Div("S.I.N TERMINAL", style=custom_css["header"]),
 
         # Banner Image
-        html.Img(src="/assets/banner.png", style={"width": "100%", "borderRadius": "10px", "marginBottom": "20px"}),
+        html.Img(src="https://github.com/ChrisBai1998/AIAgent/blob/main/asset/banner.png", style={"width": "100%", "borderRadius": "10px", "marginBottom": "20px"}),
 
         # Content Section (centered)
         html.Div(
@@ -225,7 +225,7 @@ app.layout = html.Div(
                             n_clicks=0,
                             style={**custom_css["button"], "backgroundColor": "#1DA1F2", "display": "flex", "alignItems": "center"},
                             children=[
-                                html.Img(src="/assets/twitter-logo.jpg", style={"width": "20px", "marginRight": "5px"}),
+                                html.Img(src="https://github.com/ChrisBai1998/AIAgent/blob/main/asset/twitter-logo.jpg", style={"width": "20px", "marginRight": "5px"}),
                                 "Twitter"
                             ],
                         ),
@@ -364,7 +364,7 @@ def show_rank(n_clicks):
 )
 def open_whitepaper(n_clicks):
     if n_clicks > 0:
-        webbrowser.open_new_tab("https://github.com/ChrisBai1998/AIAgent")
+        webbrowser.open_new_tab("https://github.com/ChrisBai1998/AIAgent/whitepaper")
     return no_update
 
 # Callback to open GitHub
