@@ -364,7 +364,7 @@ def show_rank(n_clicks):
 )
 def open_whitepaper(n_clicks):
     if n_clicks > 0:
-        webbrowser.open_new_tab("https://github.com/ChrisBai1998/AIAgent/whitepaper")
+        webbrowser.open_new_tab("https://github.com/ChrisBai1998/AIAgent/tree/main/whitepaper")
     return no_update
 
 # Callback to open GitHub
