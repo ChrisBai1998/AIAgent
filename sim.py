@@ -8,9 +8,10 @@ from openai import OpenAI
 
 from dotenv import load_dotenv
 import os
+import time
 
 # Initialize Dash app with Bootstrap stylesheet
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY], suppress_callback_exceptions=True)
 game_logs=[]
 history=[]
 
@@ -63,17 +64,6 @@ custom_css = {
         "margin": "0 auto",
         "maxWidth": "800px",
         "textAlign": "center",
-    },
-    "button": {
-        "backgroundColor": "#ff4500",
-        "color": "#e0e0e0",
-        "padding": "10px 20px",
-        "border": "none",
-        "borderRadius": "5px",
-        "cursor": "pointer",
-        "boxShadow": "0 0 10px #ff4500",
-        "textTransform": "uppercase",
-        "margin": "5px",
     },
     "bottom_button_container": {
         "marginTop": "20px",
@@ -131,12 +121,12 @@ app.layout = html.Div(
         # Main Header Section
         html.Div("Dungeon Adventure Game", style=custom_css["header"]),
         # Subtitle Section
-        html.Div("Human VS AI", style=custom_css["subtitle"]),
+        html.Div("👨‍👩‍👧‍👦Human ⚔️ AI🤖", style=custom_css["subtitle"]),
 
         # Banner Image
         html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/assets/banner.png",
                  style={"width": "100%", "maxWidth": "800px", "borderRadius": "10px", "marginBottom": "20px", 
-                        "display": "block", "marginLeft": "auto", "marginRight": "auto"}),
+                        "display": "block", "marginLeft": "auto", "marginRight": "auto", "box-shadow": "0 0 20px #ff4500"}),
 
         # Content Section (centered)
         html.Div(
@@ -191,7 +181,6 @@ app.layout = html.Div(
                                     "Submit",
                                     id="submit-button",
                                     n_clicks=0,
-                                    style=custom_css["button"],
                                 ),
                             ],
                             style={"display": "flex", "justifyContent": "center", "marginTop": "20px"}
@@ -210,24 +199,21 @@ app.layout = html.Div(
                             "Rank",
                             id="rank-button",
                             n_clicks=0,
-                            style=custom_css["button"],
                         ),
                         html.Button(
                             "Whitepaper",
                             id="whitepaper-button",
                             n_clicks=0,
-                            style=custom_css["button"],
                         ),
                         html.Button(
                             "GitHub",
                             id="github-button",
                             n_clicks=0,
-                            style=custom_css["button"],
                         ),
                         html.Button(
                             id="twitter-button",
                             n_clicks=0,
-                            style={**custom_css["button"], "backgroundColor": "#1DA1F2", "display": "flex", "alignItems": "center"},
+                            style={"backgroundColor": "#1DA1F2"},
                             children=[
                                 html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/assets/twitter-logo.png", style={"width": "20px", "marginRight": "5px"}),
                                 "Twitter"
@@ -237,7 +223,7 @@ app.layout = html.Div(
                             "Connect Wallet",
                             id="connect-wallet-button",
                             n_clicks=0,
-                            style={**custom_css["button"], "backgroundColor": "#FF5722"},
+                            style={"backgroundColor": "#FF5722"},
                         ),
                     ],
                 ),
@@ -252,13 +238,16 @@ app.layout = html.Div(
         dcc.Store(id="history", data=[]),
         dcc.Store(id="start_game", data=False),
 
+        # image flag
+        dcc.Store(id="dynamic_image_prompt", data=0),
+
         # Modal for ranking
         dbc.Modal(
             [
                 dbc.ModalHeader(dbc.ModalTitle("Leaderboard")),
                 dbc.ModalBody(id="rank-output"),
                 dbc.ModalFooter(
-                    dbc.Button("Close", id="close", className="ml-auto", style=custom_css["button"])
+                    dbc.Button("Close", id="close", className="ml-auto")
                 ),
             ],
             id="modal",
@@ -275,6 +264,7 @@ app.layout = html.Div(
     Output("history", "data"),
     Output("user-input", "value"),
     Output("start_game", "data"),
+    Output("dynamic_image_prompt", "data"),
     Input("submit-button", "n_clicks"),
     Input("game-logs", "children"),
     State("user-input", "value"),
@@ -282,7 +272,7 @@ app.layout = html.Div(
     State("start_game", "data"),
 )
 def new_game_or_user_input(submit_clicks, game_logs, user_input, history, start_game):
-
+    dynamic_image_prompt=0
     if submit_clicks > 0 and 'start' in user_input:
         submit_clicks-=1
         start_game=True
@@ -309,7 +299,6 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history, start_
         history = [
         {"role": "system",
          "content": "想象你现在是一个地牢游戏的掌管者，地牢游戏的背景随机生成为：雪地，森林，沙漠，现代城市，地下城，古堡，小概率出现地牢。"
-                    + "每次给用户3种选择，并且每行选择之前请加上换行符。最后一行选项之后也请加上换行符。"
                     + "基于用户的选择将出现不同的剧情分支，可能带来不同的结果（惩罚/奖励/）。游戏过程中用户可能会获得不同的物品，请基于物品为玩家量身定做后续剧情，用户赢的条件为找到最终宝藏，用户死亡时，游戏结束。"
                     + "如果用户发与选项无关的东西，必须提醒用户选择一个选项"}]
         history.append({"role": "user", "content": '现在生成初始场景，并给出下一步选项'})
@@ -322,7 +311,8 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history, start_
         text_response = completion.choices[0].message.content
         history.append({"role": "assistant", "content": text_response})
         # Add the user's input and AI's response to the game logs
-        game_logs.append(html.P(f"[AI]: {text_response}", style={"color": "#ff4500"}))
+        text_with_line_breaks = f"[AI]: {'  \n'.join(text_response.split('\n'))}"
+        game_logs.append(dcc.Markdown(text_with_line_breaks, style={"color": "#ff4500"}))
 
     if submit_clicks > 0 and start_game==True:
         submit_clicks-=1
@@ -350,21 +340,54 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history, start_
 
             # Prob-based image generation
             if generate_image:
-                image_response = client.images.generate(
-                    model="dall-e-3",
-                    prompt="生成一张场景图片来帮助描述当前场景 以提升用户体验并且请使用像素风格的图片, 并且主色调最好为偏紫色。图片中请不要添加任何文字。以下为场景描述\n" + text_response,
-                    size="1024x1024",
-                    quality="standard",
-                    n=1,
+                # Generate image with OpenAI DALL-E
+                game_logs.append(
+                    dcc.Loading(
+                        id="image-loading",
+                        type="dot",  # "cube", "dot", "circle", "graph"
+                        color="purple",
+                        children=[
+                            html.Img(
+                                id="dynamic-img",
+                                src="",
+                                style={"width": "100%", "maxWidth": "300px", "borderRadius": "10px", "padding-bottom": "5px"}
+                            )
+                        ]
+                    )
                 )
-                game_logs.append(html.Img(src=image_response.data[0].url, style={"width": "100%", "maxWidth": "300px", "borderRadius": "10px"}))
 
-            # Add the user's input and AI's response to the game logs
-            game_logs.append(html.P(f"[User]: {user_input}", style={"color": "#76ff03"}))
-            game_logs.append(html.P(f"[AI]: {text_response}", style={"color": "#ff4500"}))
+                dynamic_image_prompt=text_response
 
-    return submit_clicks, game_logs, history,'',start_game
+            # Add AI's text response to the game logs
+            text_with_line_breaks = f"[AI]: {'  \n'.join(text_response.split('\n'))}"
+            game_logs.append(dcc.Markdown(text_with_line_breaks, style={"color": "#ff4500"}))
 
+    return submit_clicks, game_logs, history, '', start_game, dynamic_image_prompt
+
+# Callback for dynamic id/src image
+@app.callback(
+    Output("dynamic-img", "src"),  # Output for the src of the image
+    Output("dynamic-img", "id"),   # Output for the id of the image
+    Input("dynamic_image_prompt", "data"),
+)
+def generate_dynamic_ai_img(prompt):
+    if prompt is None or prompt == '':
+        return "", ""  # Return empty src and id if there's no input
+    
+    # Generate a random image source (you can replace this with an actual URL)
+    dynamic_ai_img_url = client.images.generate(
+                                        model="dall-e-3",
+                                        prompt="生成一张场景图片来帮助描述当前场景 以提升用户体验并且请使用像素风格的图片, 并且主色调最好为偏紫色。图片中请不要添加任何文字。以下为场景描述\n" + prompt,
+                                        size="1024x1024",
+                                        quality="standard",
+                                        n=1,
+                                    ).data[0].url
+    
+    # Generate a dynamic ID based on input value and random number
+    dynamic_id = f"dynamic-ai-img-{str(int(time.time()))}"
+    
+    # Return the dynamic id and image URL
+    return dynamic_ai_img_url, dynamic_id
 
 # Callback to toggle modal
 @app.callback(
