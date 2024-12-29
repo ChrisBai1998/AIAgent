@@ -61,13 +61,19 @@ custom_css = {
         "textTransform": "uppercase",
         "margin": "5px",
     },
+    "bottom_button_container": {
+        "marginTop": "20px",
+        "display": "flex",
+        "flexWrap": "wrap",
+        "justifyContent": "center",
+        "gap": "10px",
+    },
     "dropdown": {
         "backgroundColor": "#1a1a1a",
         "color": "#e0e0e0",
         "border": "1px solid #ff4500",
         "borderRadius": "5px",
         "width": "200px",
-        "padding": "5px",
     },
     "textbox": {
         "backgroundColor": "#1a1a1a",
@@ -134,7 +140,7 @@ app.layout = html.Div(
                                 {"label": "Top", "value": "top"},
                                 {"label": "Random", "value": "random"},
                             ],
-                            value="latest",
+                            value="Latest",
                             style=custom_css["dropdown"],
                         ),
                     ],
@@ -146,7 +152,7 @@ app.layout = html.Div(
                     style=custom_css["textbox"],
                     children=[
                         html.Div(
-                            style={"marginBottom": "10px"},
+                            style=custom_css["bottom_button_container"],
                             children=[
                                 html.H4(
                                     "Money Gun: Because Who Needs a Loan When You Can Shoot?",
@@ -200,7 +206,7 @@ app.layout = html.Div(
 
                 # Rank Button and Whitepaper Link
                 html.Div(
-                    style={"marginTop": "20px", "display": "flex", "justifyContent": "center"},
+                    style={"width": "100%", "maxWidth": "800px", "margin": "0 auto", "display": "flex", "flexWrap": "wrap", "justifyContent": "flex-start"},
                     children=[
                         html.Button(
                             "Rank",
