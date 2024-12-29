@@ -11,9 +11,9 @@ app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
 game_logs=[]
 history=[]
 client = OpenAI(
-    api_key='7bb6b5cb-cc26-488c-a436-604cacd9a4d3',
-    base_url="https://ark.cn-beijing.volces.com/api/v3",
+    api_key=""
 )
+
 
 # Custom CSS for a roguelike dungeon pixel aesthetic
 custom_css = {
@@ -244,6 +244,7 @@ app.layout = html.Div(
         ),
         #save conversation
         dcc.Store(id="history", data=[]),
+        dcc.Store(id="start_game", data=False),
 
         # Modal for ranking
         dbc.Modal(
@@ -267,15 +268,18 @@ app.layout = html.Div(
     Output("game-logs", "children"),
     Output("history", "data"),
     Output("user-input", "value"),
+    Output("start_game", "data"),
     Input("submit-button", "n_clicks"),
     Input("game-logs", "children"),
     State("user-input", "value"),
-    State("history", "data")
+    State("history", "data"),
+    State("start_game", "data"),
 )
-def new_game_or_user_input(submit_clicks, game_logs, user_input, history):
+def new_game_or_user_input(submit_clicks, game_logs, user_input, history,start_game):
 
     if submit_clicks > 0 and 'start' in user_input:
         submit_clicks-=1
+        start_game=True
         game_logs=[
                     html.H4(
                             "Pixel Dungeon Master:",
@@ -298,10 +302,10 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history):
         history=[]
         history = [
         {"role": "system",
-         "content": "想象你现在是一个地牢游戏的掌管者，地牢游戏的背景随机生成为：雪地，森林，沙漠，现代城市，地下城，古堡，小概率出现地牢。基于用户的选择将出现不同的剧情分支，可能带来不同的结果（惩罚/奖励/）。游戏过程中用户可能会获得不同的物品，请基于物品为玩家量身定做后续剧情，用户赢的条件为找到最终宝藏，用户死亡时，游戏结束"}]
+         "content": "想象你现在是一个地牢游戏的掌管者，地牢游戏的背景随机生成为：雪地，森林，沙漠，现代城市，地下城，古堡，小概率出现地牢。每次给用户3种选择，基于用户的选择将出现不同的剧情分支，可能带来不同的结果（惩罚/奖励/）。游戏过程中用户可能会获得不同的物品，请基于物品为玩家量身定做后续剧情，用户赢的条件为找到最终宝藏，用户死亡时，游戏结束。如果用户发与选项无关的东西，提醒用户选择一个选项"}]
         history.append({"role": "user", "content": '现在生成初始场景，并给出下一步选项'})
         completion = client.chat.completions.create(
-            model="ep-20241224223325-spdq4",  # your model endpoint ID
+            model="gpt-4o-mini",  # your model endpoint ID
             messages=history,
             stream=False,
         )
@@ -311,13 +315,13 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history):
         # Add the user's input and AI's response to the game logs
         game_logs.append(html.P(f"[AI]: {ai_response}", style={"color": "#ff4500"}))
 
-    if submit_clicks > 0 and 'start' not in user_input:
+    if submit_clicks > 0 and start_game==True:
         submit_clicks-=1
         if user_input:
             # Send a request to the OpenAI API to get AI's response
             history.append({"role": "user", "content": user_input})
             completion = client.chat.completions.create(
-                model="ep-20241224223325-spdq4",  # your model endpoint ID
+                model="gpt-4o-mini",  # your model endpoint ID
                 messages=history,
                 stream=False,
             )
@@ -325,12 +329,19 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history):
             # Extract AI's response
             ai_response = completion.choices[0].message.content
             history.append({"role": "assistant", "content": ai_response})
-
+            response = client.images.generate(
+                model="dall-e-2",
+                prompt=ai_response,
+                size="1024x1024",
+                quality="standard",
+                n=1,
+            )
+            game_logs.append(html.Img(src=response.data[0].url, style={"width": "100%", "maxWidth": "500px", "borderRadius": "10px"}))
             # Add the user's input and AI's response to the game logs
             game_logs.append(html.P(f"[User]: {user_input}", style={"color": "#76ff03"}))
             game_logs.append(html.P(f"[AI]: {ai_response}", style={"color": "#ff4500"}))
 
-    return submit_clicks, game_logs, history,''
+    return submit_clicks, game_logs, history,'',start_game
 
 
 # Callback to toggle modal
