@@ -35,11 +35,19 @@ custom_css = {
         "backgroundColor": "#1a1a1a",
         "padding": "10px",
         "borderRadius": "5px",
-        "border": "1px solid #ff4500",
+        # "border": "1px solid #ff4500",
     },
     "header": {
         "color": "#ff4500",
         "fontSize": "32px",
+        "fontWeight": "bold",
+        "textAlign": "center",
+        "marginBottom": "20px",
+        "textShadow": "0 0 10px #ff4500",
+    },
+    "subtitle": {
+        "color": "#ff4500",
+        "fontSize": "20px",
         "fontWeight": "bold",
         "textAlign": "center",
         "marginBottom": "20px",
@@ -61,13 +69,19 @@ custom_css = {
         "textTransform": "uppercase",
         "margin": "5px",
     },
+    "bottom_button_container": {
+        "marginTop": "20px",
+        "display": "flex",
+        "flexWrap": "wrap",
+        "justifyContent": "center",
+        "gap": "10px",
+    },
     "dropdown": {
         "backgroundColor": "#1a1a1a",
         "color": "#e0e0e0",
         "border": "1px solid #ff4500",
         "borderRadius": "5px",
         "width": "200px",
-        "padding": "5px",
     },
     "textbox": {
         "backgroundColor": "#1a1a1a",
@@ -108,10 +122,14 @@ app.layout = html.Div(
         html.Div("CA: FdE....", style=custom_css["ca_header"]),
 
         # Main Header Section
-        html.Div("S.I.N TERMINAL", style=custom_css["header"]),
+        html.Div("Dungeon Adventure Game", style=custom_css["header"]),
+        # Subtitle Section
+        html.Div("Human VS AI", style=custom_css["subtitle"]),
 
         # Banner Image
-        html.Img(src="https://github.com/ChrisBai1998/AIAgent/blob/main/asset/banner.png", style={"width": "100%", "borderRadius": "10px", "marginBottom": "20px"}),
+        html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/asset/banner.png",
+                 style={"width": "100%", "maxWidth": "800px", "borderRadius": "10px", "marginBottom": "20px", 
+                        "display": "block", "marginLeft": "auto", "marginRight": "auto"}),
 
         # Content Section (centered)
         html.Div(
@@ -134,7 +152,7 @@ app.layout = html.Div(
                                 {"label": "Top", "value": "top"},
                                 {"label": "Random", "value": "random"},
                             ],
-                            value="latest",
+                            value="Latest",
                             style=custom_css["dropdown"],
                         ),
                     ],
@@ -146,7 +164,7 @@ app.layout = html.Div(
                     style=custom_css["textbox"],
                     children=[
                         html.Div(
-                            style={"marginBottom": "10px"},
+                            style=custom_css["bottom_button_container"],
                             children=[
                                 html.H4(
                                     "Money Gun: Because Who Needs a Loan When You Can Shoot?",
@@ -200,7 +218,7 @@ app.layout = html.Div(
 
                 # Rank Button and Whitepaper Link
                 html.Div(
-                    style={"marginTop": "20px", "display": "flex", "justifyContent": "center"},
+                    style={"width": "100%", "maxWidth": "800px", "margin": "0 auto", "display": "flex", "flexWrap": "wrap", "justifyContent": "flex-start"},
                     children=[
                         html.Button(
                             "Rank",
@@ -225,7 +243,7 @@ app.layout = html.Div(
                             n_clicks=0,
                             style={**custom_css["button"], "backgroundColor": "#1DA1F2", "display": "flex", "alignItems": "center"},
                             children=[
-                                html.Img(src="https://github.com/ChrisBai1998/AIAgent/blob/main/asset/twitter-logo.jpg", style={"width": "20px", "marginRight": "5px"}),
+                                html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/asset/twitter-logo.jpg", style={"width": "20px", "marginRight": "5px"}),
                                 "Twitter"
                             ],
                         ),
@@ -405,4 +423,5 @@ def connect_wallet(n_clicks):
 
 # Run the app
 if __name__ == "__main__":
-    app.run_server(debug=True, host='0.0.0.0', port=8051)
+    app.run_server(debug=True)
+    # app.run_server(debug=True, host='0.0.0.0', port=8051)
