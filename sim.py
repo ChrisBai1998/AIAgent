@@ -36,7 +36,7 @@ custom_css = {
         "color": "#e0e0e0",
         "fontSize": "14px",
         "fontWeight": "bold",
-        "textAlign": "left",
+        "textAlign": "center",
         "marginBottom": "10px",
         "textShadow": "0 0 10px #ff4500",
         "backgroundColor": "#1a1a1a",
@@ -116,7 +116,7 @@ app.layout = html.Div(
     style=custom_css["container"],
     children=[
         # CA Header Section (moved to the top left)
-        html.Div("CA: FdE....", style=custom_css["ca_header"]),
+        html.Div("CA: 0x2170ed0880ac9a755fd29b2688956bd959f933f8", style=custom_css["ca_header"]),
 
         # Main Header Section
         html.Div("Dungeon Adventure Game", style=custom_css["header"]),
