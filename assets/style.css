@@ -1,0 +1,16 @@
+/* Style the dropdown menu */
+.Select-menu {
+    background-color: #1a1a1a !important;
+    color: #e0e0e0 !important;
+}
+
+/* Style the dropdown menu options */
+.Select-option {
+    background-color: #1a1a1a !important;
+    color: #e0e0e0 !important;
+}
+
+.Select-option:hover {
+    background-color: #ff4500 !important;
+    color: #1a1a1a !important;
+}
