@@ -35,11 +35,19 @@ custom_css = {
         "backgroundColor": "#1a1a1a",
         "padding": "10px",
         "borderRadius": "5px",
-        "border": "1px solid #ff4500",
+        # "border": "1px solid #ff4500",
     },
     "header": {
         "color": "#ff4500",
         "fontSize": "32px",
+        "fontWeight": "bold",
+        "textAlign": "center",
+        "marginBottom": "20px",
+        "textShadow": "0 0 10px #ff4500",
+    },
+    "subtitle": {
+        "color": "#ff4500",
+        "fontSize": "20px",
         "fontWeight": "bold",
         "textAlign": "center",
         "marginBottom": "20px",
@@ -114,10 +122,14 @@ app.layout = html.Div(
         html.Div("CA: FdE....", style=custom_css["ca_header"]),
 
         # Main Header Section
-        html.Div("S.I.N TERMINAL", style=custom_css["header"]),
+        html.Div("Dungeon Adventure Game", style=custom_css["header"]),
+        # Subtitle Section
+        html.Div("Human VS AI", style=custom_css["subtitle"]),
 
         # Banner Image
-        html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/asset/banner.png", style={"width": "100%", "borderRadius": "10px", "marginBottom": "20px"}),
+        html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/asset/banner.png",
+                 style={"width": "100%", "maxWidth": "800px", "borderRadius": "10px", "marginBottom": "20px", 
+                        "display": "block", "marginLeft": "auto", "marginRight": "auto"}),
 
         # Content Section (centered)
         html.Div(
