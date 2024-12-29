@@ -8,7 +8,8 @@ from openai import OpenAI
 
 # Initialize Dash app with Bootstrap stylesheet
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
-
+game_logs=[]
+history=[]
 client = OpenAI(
     api_key='7bb6b5cb-cc26-488c-a436-604cacd9a4d3',
     base_url="https://ark.cn-beijing.volces.com/api/v3",
@@ -135,28 +136,6 @@ app.layout = html.Div(
         html.Div(
             style=custom_css["content"],
             children=[
-                # Dropdown + New Game Button
-                html.Div(
-                    style={"display": "flex", "justifyContent": "space-between", "alignItems": "center"},
-                    children=[
-                        html.Button(
-                            "New Game 💬",
-                            id="new-game-button",
-                            n_clicks=0,
-                            style=custom_css["button"],
-                        ),
-                        dcc.Dropdown(
-                            id="dropdown-menu",
-                            options=[
-                                {"label": "Latest", "value": "latest"},
-                                {"label": "Top", "value": "top"},
-                                {"label": "Random", "value": "random"},
-                            ],
-                            value="Latest",
-                            style=custom_css["dropdown"],
-                        ),
-                    ],
-                ),
 
                 # Game Logs Section (Scrollable)
                 html.Div(
@@ -167,22 +146,23 @@ app.layout = html.Div(
                             style=custom_css["bottom_button_container"],
                             children=[
                                 html.H4(
-                                    "Money Gun: Because Who Needs a Loan When You Can Shoot?",
+                                    "Pixel Dungeon Master:",
                                     style={"color": "#ff4500"},
                                 ),
                                 html.P(
-                                    "GAME ROLE: You're here to pitch The Infinite Toaster™. A toaster that only toasts the concept of bread. Meta and pointless. You're seeking to raise $500,000.",
+                                    "Welcome, brave adventurer, to the unknown! Before you stand six doors—snowfields, shadowy forests, scorching deserts, or perhaps something else. Even I forget sometimes.",
                                     style={"color": "#e0e0e0"},
                                 ),
                                 html.P(
-                                    "[11:05:05 PM] User: I have a gun that shoots money. It is magic and I don't know where it came from but it's mine, I can prove it. And I will give you money for favors.",
+                                    "In this dungeon, your choices shape your fate. I’ll give you some items, but beware—gifts can lead to trouble too.",
                                     style={"color": "#76ff03"},
                                 ),
                                 html.P(
-                                    "[11:05:05 PM] Shark: [Mark Crude-an]: 'I'm out immediately. Not only is this clearly nonsense, but it sounds like you're trying to pitch us stolen property or some kind of counterfeit operation. I don't look good in prison orange.'",
+                                    "our mission? Find the legendary treasure! But watch out for traps and ‘friendly’ monsters. Fail, and the souls of past adventurers might just keep you company!Ready? Hit 'Start' and prove yourself a hero—or the next joke.",
                                     style={"color": "#ff4500"},
                                 ),
-                                html.P("Outcome: LOSS", style={"color": "#ff4500", "fontWeight": "bold"}),
+                                html.P("Type /start to begin.", style={"color": "#ff4500", "fontWeight": "bold"}),
+                                
                             ],
                         ),
                     ],
@@ -196,13 +176,13 @@ app.layout = html.Div(
                                 dcc.Input(
                                     id="user-input",
                                     type="text",
-                                    placeholder="输入你的命令...",
+                                    placeholder="Enter your Choice ...",
                                     style={"width": "80%", "padding": "10px", "borderRadius": "5px",
                                            "border": "1px solid #ff4500", "color": "#e0e0e0",
                                            "backgroundColor": "#1a1a1a"},
                                 ),
                                 html.Button(
-                                    "提交",
+                                    "Submit",
                                     id="submit-button",
                                     n_clicks=0,
                                     style=custom_css["button"],
@@ -262,6 +242,8 @@ app.layout = html.Div(
                 html.Div(id="connect-wallet-output", style={"marginTop": "20px", "color": "white"}),
             ],
         ),
+        #save conversation
+        dcc.Store(id="history", data=[]),
 
         # Modal for ranking
         dbc.Modal(
@@ -280,43 +262,44 @@ app.layout = html.Div(
 
 # Callback to handle "New Game" button click
 @app.callback(
-    Output("new-game-output", "children"),
+   
+    Output("submit-button", "n_clicks"),
     Output("game-logs", "children"),
-    Input("new-game-button", "n_clicks"),
+    Output("history", "data"),
+    Output("user-input", "value"),
     Input("submit-button", "n_clicks"),
+    Input("game-logs", "children"),
     State("user-input", "value"),
+    State("history", "data")
 )
-def new_game_or_user_input(new_game_clicks, submit_clicks, user_input):
-    history = [
+def new_game_or_user_input(submit_clicks, game_logs, user_input, history):
+
+    if submit_clicks > 0 and 'start' in user_input:
+        submit_clicks-=1
+        game_logs=[
+                    html.H4(
+                            "Pixel Dungeon Master:",
+                            style={"color": "#ff4500"},
+                            ),
+                    html.P(
+                            "Welcome, brave adventurer, to the unknown! Before you stand six doors—snowfields, shadowy forests, scorching deserts, or perhaps something else. Even I forget sometimes.",
+                            style={"color": "#e0e0e0"},
+                            ),
+                    html.P(
+                            "In this dungeon, your choices shape your fate. I’ll give you some items, but beware—gifts can lead to trouble too.",
+                            style={"color": "#76ff03"},
+                            ),
+                    html.P(
+                            "our mission? Find the legendary treasure! But watch out for traps and ‘friendly’ monsters. Fail, and the souls of past adventurers might just keep you company!Ready? Hit 'Start' and prove yourself a hero—or the next joke.",
+                             style={"color": "#ff4500"},
+                                ),
+                    html.P("Type /start to begin.", style={"color": "#ff4500", "fontWeight": "bold"}),
+                                 ]
+        history=[]
+        history = [
         {"role": "system",
-         "content": "想象你是一个地牢游戏的掌控者，现在需要你根据用户描述给出下一步可能出现的场景和选项供用户选择，用户原始生命值为10，武力值为0，如果遇到武力值比他高的怪物扣除两点生命值，用户在游玩过程中会捡到武器.用户赢的条件为找到宝藏，用户生命值为0时，游戏结束."}
-    ]
-    history.append({"role": "user", "content": '现在生成初始场景，并给出下一步选项'})
-    game_logs = [
-        html.Div(
-            style={"marginBottom": "10px"},
-            children=[
-                html.H4(
-                    "Money Gun: Because Who Needs a Loan When You Can Shoot?",
-                    style={"color": "#ff4500"},
-                ),
-                html.P(
-                    "GAME ROLE: You're here to pitch The Infinite Toaster™. A toaster that only toasts the concept of bread. Meta and pointless. You're seeking to raise $500,000.",
-                    style={"color": "#e0e0e0"},
-                ),
-                html.P(
-                    "[11:05:05 PM] User: I have a gun that shoots money. It is magic and I don't know where it came from but it's mine, I can prove it. And I will give you money for favors.",
-                    style={"color": "#76ff03"},
-                ),
-                html.P(
-                    "[11:05:05 PM] Shark: [Mark Crude-an]: 'I'm out immediately. Not only is this clearly nonsense, but it sounds like you're trying to pitch us stolen property or some kind of counterfeit operation. I don't look good in prison orange.'",
-                    style={"color": "#ff4500"},
-                ),
-                html.P("Outcome: LOSS", style={"color": "#ff4500", "fontWeight": "bold"}),
-            ],
-        ),
-    ]
-    if new_game_clicks > 0:
+         "content": "想象你现在是一个地牢游戏的掌管者，地牢游戏的背景随机生成为：雪地，森林，沙漠，现代城市，地下城，古堡，小概率出现地牢。基于用户的选择将出现不同的剧情分支，可能带来不同的结果（惩罚/奖励/）。游戏过程中用户可能会获得不同的物品，请基于物品为玩家量身定做后续剧情，用户赢的条件为找到最终宝藏，用户死亡时，游戏结束"}]
+        history.append({"role": "user", "content": '现在生成初始场景，并给出下一步选项'})
         completion = client.chat.completions.create(
             model="ep-20241224223325-spdq4",  # your model endpoint ID
             messages=history,
@@ -328,7 +311,8 @@ def new_game_or_user_input(new_game_clicks, submit_clicks, user_input):
         # Add the user's input and AI's response to the game logs
         game_logs.append(html.P(f"[AI]: {ai_response}", style={"color": "#ff4500"}))
 
-    if submit_clicks > 0:
+    if submit_clicks > 0 and 'start' not in user_input:
+        submit_clicks-=1
         if user_input:
             # Send a request to the OpenAI API to get AI's response
             history.append({"role": "user", "content": user_input})
@@ -346,7 +330,8 @@ def new_game_or_user_input(new_game_clicks, submit_clicks, user_input):
             game_logs.append(html.P(f"[User]: {user_input}", style={"color": "#76ff03"}))
             game_logs.append(html.P(f"[AI]: {ai_response}", style={"color": "#ff4500"}))
 
-    return "", game_logs
+    return submit_clicks, game_logs, history,''
+
 
 # Callback to toggle modal
 @app.callback(
