@@ -1,0 +1,26 @@
+/* Base button styles */
+button {
+    background-color: #ff4500;
+    color: #e0e0e0;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 0 10px #ff4500;
+    text-transform: uppercase;
+    margin: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+button:hover {
+    box-shadow: 0 0 30px #540366;
+    transform: scale(1.07);
+}
+
+/* Active effect */
+button:active {
+    background-color: #c03900;
+    box-shadow: 0 0 30px #ff4500;
+    transform: scale(0.95);
+}
