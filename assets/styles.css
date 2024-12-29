@@ -14,7 +14,7 @@ button {
 
 /* Hover effect */
 button:hover {
-    box-shadow: 0 0 30px #540366;
+    box-shadow: 0 0 30px #ff4500;
     transform: scale(1.07);
 }
 
