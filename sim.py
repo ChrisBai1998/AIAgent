@@ -3,6 +3,7 @@ from dash import dcc, html, Input, Output, State, no_update
 import dash_bootstrap_components as dbc
 import sqlite3
 import webbrowser
+import random
 from openai import OpenAI
 
 from dotenv import load_dotenv
@@ -314,10 +315,10 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history,start_g
             stream=False,
         )
         # Extract AI's response
-        ai_response = completion.choices[0].message.content
-        history.append({"role": "assistant", "content": ai_response})
+        text_response = completion.choices[0].message.content
+        history.append({"role": "assistant", "content": text_response})
         # Add the user's input and AI's response to the game logs
-        game_logs.append(html.P(f"[AI]: {ai_response}", style={"color": "#ff4500"}))
+        game_logs.append(html.P(f"[AI]: {text_response}", style={"color": "#ff4500"}))
 
     if submit_clicks > 0 and start_game==True:
         submit_clicks-=1
@@ -325,25 +326,36 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history,start_g
             # Send a request to the OpenAI API to get AI's response
             history.append({"role": "user", "content": user_input})
             completion = client.chat.completions.create(
-                model="gpt-4o-mini",  # your model endpoint ID
+                model="gpt-4o-mini",
                 messages=history,
                 stream=False,
             )
 
             # Extract AI's response
-            ai_response = completion.choices[0].message.content
-            history.append({"role": "assistant", "content": ai_response})
-            response = client.images.generate(
-                model="dall-e-2",
-                prompt=ai_response,
-                size="1024x1024",
-                quality="standard",
-                n=1,
-            )
-            game_logs.append(html.Img(src=response.data[0].url, style={"width": "100%", "maxWidth": "500px", "borderRadius": "10px"}))
+            text_response = completion.choices[0].message.content
+            history.append({"role": "assistant", "content": text_response})
+
+            # First-time flag or random probability
+            if "first_time" not in history[-1]:  # First time
+                history[-1]["first_time"] = True
+                generate_image = True
+            else:  # Subsequent clicks
+                generate_image = random.random() < 0.2  # 1/5 chance
+
+            # Prob-based image generation
+            if generate_image:
+                image_response = client.images.generate(
+                    model="dall-e-3",
+                    prompt="生成一张场景图片来帮助描述当前场景 以提升用户体验并且请使用像素风格的图片 并且主色调最好为偏紫色。以下为场景描述\n" + text_response,
+                    size="1024x1024",
+                    quality="standard",
+                    n=1,
+                )
+                game_logs.append(html.Img(src=image_response.data[0].url, style={"width": "100%", "maxWidth": "300px", "borderRadius": "10px"}))
+
             # Add the user's input and AI's response to the game logs
             game_logs.append(html.P(f"[User]: {user_input}", style={"color": "#76ff03"}))
-            game_logs.append(html.P(f"[AI]: {ai_response}", style={"color": "#ff4500"}))
+            game_logs.append(html.P(f"[AI]: {text_response}", style={"color": "#ff4500"}))
 
     return submit_clicks, game_logs, history,'',start_game
 
