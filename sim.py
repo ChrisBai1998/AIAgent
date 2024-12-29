@@ -350,7 +350,8 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history, start_
                             html.Img(
                                 id="dynamic-img",
                                 src="",
-                                style={"width": "100%", "maxWidth": "300px", "borderRadius": "10px", "padding-bottom": "5px"}
+                                style={"width": "100%", "maxWidth": "300px", "borderRadius": "10px",
+                                        "padding-bottom": "5px", "box-shadow": "0 0 20px #950392"}
                             )
                         ]
                     )
@@ -377,7 +378,7 @@ def generate_dynamic_ai_img(prompt):
     # Generate a random image source (you can replace this with an actual URL)
     dynamic_ai_img_url = client.images.generate(
                                         model="dall-e-3",
-                                        prompt="生成一张场景图片来帮助描述当前场景 以提升用户体验并且请使用像素风格的图片, 并且主色调最好为偏紫色。图片中请不要添加任何文字。以下为场景描述\n" + prompt,
+                                        prompt="生成一张场景图片来帮助描述当前场景 以提升用户体验并且请使用像素风格的图片, 并且主色调最好为偏紫色。图片中绝对不允许添加任何文字。以下为场景描述\n" + prompt,
                                         size="1024x1024",
                                         quality="standard",
                                         n=1,
