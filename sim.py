@@ -1,19 +1,23 @@
 import dash
 from dash import dcc, html, Input, Output, State, no_update
-import requests
 import dash_bootstrap_components as dbc
 import sqlite3
 import webbrowser
 from openai import OpenAI
 
+from dotenv import load_dotenv
+import os
+
 # Initialize Dash app with Bootstrap stylesheet
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY])
 game_logs=[]
 history=[]
-client = OpenAI(
-    api_key=""
-)
 
+load_dotenv()
+API_KEY = os.getenv("OPENAI_API_KEY")
+client = OpenAI(
+    api_key=API_KEY
+)
 
 # Custom CSS for a roguelike dungeon pixel aesthetic
 custom_css = {
@@ -128,7 +132,7 @@ app.layout = html.Div(
         html.Div("Human VS AI", style=custom_css["subtitle"]),
 
         # Banner Image
-        html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/asset/banner.png",
+        html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/assets/banner.png",
                  style={"width": "100%", "maxWidth": "800px", "borderRadius": "10px", "marginBottom": "20px", 
                         "display": "block", "marginLeft": "auto", "marginRight": "auto"}),
 
@@ -223,7 +227,7 @@ app.layout = html.Div(
                             n_clicks=0,
                             style={**custom_css["button"], "backgroundColor": "#1DA1F2", "display": "flex", "alignItems": "center"},
                             children=[
-                                html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/asset/twitter-logo.jpg", style={"width": "20px", "marginRight": "5px"}),
+                                html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/assets/twitter-logo.png", style={"width": "20px", "marginRight": "5px"}),
                                 "Twitter"
                             ],
                         ),
