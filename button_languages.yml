@@ -1,0 +1,65 @@
+# button order: submit-button, rank-button, whitepaper-button, github-button, twitter-button, connect-wallet-button
+
+en:
+  - Submit
+  - Rank
+  - Whitepaper
+  - Github
+  - Twitter
+  - Connect Wallet
+
+ko: # Korean
+  - 제출하기
+  - 순위
+  - 백서
+  - Github
+  - Twitter
+  - 지갑 연결
+
+zh: # Chinese (Simplified)
+  - 提交
+  - 排名
+  - 白皮书
+  - Github
+  - Twitter
+  - 连接钱包
+
+pl: # Polish
+  - Prześlij
+  - Ranking
+  - Biała księga
+  - Github
+  - Twitter
+  - Połącz portfel
+
+ja: # Japanese
+  - 提出
+  - ランク
+  - ホワイトペーパー
+  - Github
+  - Twitter
+  - ウォレットを接続
+
+es: # Spanish
+  - Enviar
+  - Clasificación
+  - Libro Blanco
+  - Github
+  - Twitter
+  - Conectar Cartera
+
+de: # German
+  - Einreichen
+  - Rang
+  - Weißbuch
+  - Github
+  - Twitter
+  - Wallet verbinden
+
+fr: # French
+  - Soumettre
+  - Classement
+  - Livre blanc
+  - Github
+  - Twitter
+  - Connecter le portefeuille

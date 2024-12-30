@@ -9,6 +9,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 import time
+import yaml
 
 # Initialize Dash app with Bootstrap stylesheet
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.DARKLY], suppress_callback_exceptions=True)
@@ -72,13 +73,6 @@ custom_css = {
         "justifyContent": "center",
         "gap": "10px",
     },
-    "dropdown": {
-        "backgroundColor": "#1a1a1a",
-        "color": "#e0e0e0",
-        "border": "1px solid #ff4500",
-        "borderRadius": "5px",
-        "width": "200px",
-    },
     "textbox": {
         "backgroundColor": "#1a1a1a",
         "color": "#76ff03",
@@ -119,7 +113,7 @@ app.layout = html.Div(
         html.Div("CA: 0x2170ed0880ac9a755fd29b2688956bd959f933f8", style=custom_css["ca_header"]),
 
         # Main Header Section
-        html.Div("Dungeon Adventure Game", style=custom_css["header"]),
+        html.Div("Pixel Dungeon", style=custom_css["header"]),
         # Subtitle Section
         html.Div("👨‍👩‍👧‍👦Human ⚔️ AI🤖", style=custom_css["subtitle"]),
 
@@ -132,6 +126,33 @@ app.layout = html.Div(
         html.Div(
             style=custom_css["content"],
             children=[
+                # languages
+                html.Div(
+                    style={'display': 'flex', 'align-items': 'center', 'justify-content': 'flex-end', 'gap': '10px'},
+                    children=[
+                        html.Img(
+                            src="assets/language.png",  # Replace with the actual image path
+                            style={'width': '30px', 'height': '30px'}  # Set size of the image
+                        ),
+                        
+                        # Dropdown
+                        dcc.Dropdown(
+                            id="language-dropdown",
+                            options=[
+                                {"label": "English", "value": "en"},
+                                {"label": "Español", "value": "es"},
+                                {"label": "Français", "value": "fr"},
+                                {"label": "Deútsch", "value": "de"},
+                                {"label": "polski", "value": "pl"},
+                                {"label": "한국어", "value": "ko"},
+                                {"label": "日本語", "value": "ja"},
+                                {"label": "中文", "value": "zh"},
+                            ],
+                            placeholder="English",
+                            value="en",  # Default value
+                        ),
+                    ]
+                ),
 
                 # Game Logs Section (Scrollable)
                 html.Div(
@@ -141,24 +162,15 @@ app.layout = html.Div(
                         html.Div(
                             style=custom_css["bottom_button_container"],
                             children=[
-                                html.H4(
-                                    "Pixel Dungeon Master:",
-                                    style={"color": "#ff4500"},
+                                dcc.Markdown(
+                                    '''
+                                    [Pixel Dungeon Master]: Welcome, brave adventurer, to the unknown! Before you stand six doors—snowfields, shadowy forests, scorching deserts, or perhaps something else. Even I forget sometimes.
+                                    In this dungeon, your choices shape your fate. I’ll give you some items, but beware—gifts can lead to trouble too.
+                                    our mission? Find the legendary treasure! But watch out for traps and ‘friendly’ monsters. Fail, and the souls of past adventurers might just keep you company!Ready? Hit 'Start' and prove yourself a hero—or the next joke.
+                                    Type /start to begin.
+                                    ''',
+                                    style={"color": "#8c12bc"},
                                 ),
-                                html.P(
-                                    "Welcome, brave adventurer, to the unknown! Before you stand six doors—snowfields, shadowy forests, scorching deserts, or perhaps something else. Even I forget sometimes.",
-                                    style={"color": "#e0e0e0"},
-                                ),
-                                html.P(
-                                    "In this dungeon, your choices shape your fate. I’ll give you some items, but beware—gifts can lead to trouble too.",
-                                    style={"color": "#76ff03"},
-                                ),
-                                html.P(
-                                    "our mission? Find the legendary treasure! But watch out for traps and ‘friendly’ monsters. Fail, and the souls of past adventurers might just keep you company!Ready? Hit 'Start' and prove yourself a hero—or the next joke.",
-                                    style={"color": "#ff4500"},
-                                ),
-                                html.P("Type /start to begin.", style={"color": "#ff4500", "fontWeight": "bold"}),
-                                
                             ],
                         ),
                     ],
@@ -277,24 +289,16 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history, start_
         submit_clicks-=1
         start_game=True
         game_logs=[
-                    html.H4(
-                            "Pixel Dungeon Master:",
-                            style={"color": "#ff4500"},
+                    dcc.Markdown(
+                            '''
+                            [Pixel Dungeon Master]: Welcome, brave adventurer, to the unknown! Before you stand six doors—snowfields, shadowy forests, scorching deserts, or perhaps something else. Even I forget sometimes."
+                            In this dungeon, your choices shape your fate. I’ll give you some items, but beware—gifts can lead to trouble too.
+                            our mission? Find the legendary treasure! But watch out for traps and ‘friendly’ monsters. Fail, and the souls of past adventurers might just keep you company!Ready? Hit 'Start' and prove yourself a hero—or the next joke.
+                            Type /start to begin.
+                            ''',
+                            style={"color": "#8c12bc"},
                             ),
-                    html.P(
-                            "Welcome, brave adventurer, to the unknown! Before you stand six doors—snowfields, shadowy forests, scorching deserts, or perhaps something else. Even I forget sometimes.",
-                            style={"color": "#e0e0e0"},
-                            ),
-                    html.P(
-                            "In this dungeon, your choices shape your fate. I’ll give you some items, but beware—gifts can lead to trouble too.",
-                            style={"color": "#76ff03"},
-                            ),
-                    html.P(
-                            "our mission? Find the legendary treasure! But watch out for traps and ‘friendly’ monsters. Fail, and the souls of past adventurers might just keep you company!Ready? Hit 'Start' and prove yourself a hero—or the next joke.",
-                             style={"color": "#ff4500"},
-                                ),
-                    html.P("Type /start to begin.", style={"color": "#ff4500", "fontWeight": "bold"}),
-                                 ]
+                    ]
         history=[]
         history = [
         {"role": "system",
@@ -378,7 +382,8 @@ def generate_dynamic_ai_img(prompt):
     # Generate a random image source (you can replace this with an actual URL)
     dynamic_ai_img_url = client.images.generate(
                                         model="dall-e-3",
-                                        prompt="生成一张场景图片来帮助描述当前场景 以提升用户体验并且请使用像素风格的图片, 并且主色调最好为偏紫色。图片中绝对不允许添加任何文字。以下为场景描述\n" + prompt,
+                                        prompt="生成一张场景图片来帮助描述当前场景 以提升用户体验并且请使用像素风格的图片, 并且主色调最好为偏紫色。以下为场景描述\n" 
+                                                + prompt + " 生成的像素图片中绝对不允许以任何形式添加任何文字。",
                                         size="1024x1024",
                                         quality="standard",
                                         n=1,
@@ -462,6 +467,28 @@ def connect_wallet(n_clicks):
         # Add your wallet connection logic here
         return "Wallet connected."
     return no_update
+
+# Callback to select language
+@app.callback(
+    [
+        Output("submit-button", "children"),
+        Output("rank-button", "children"),
+        Output("whitepaper-button", "children"),
+        Output("github-button", "children"),
+        Output("twitter-button", "children"),
+        Output("connect-wallet-button", "children"),
+    ],
+    Input("language-dropdown", "value")
+)
+def update_language(selected_language):
+    with open('button_languages.yml', 'r', encoding='utf-8') as file:
+        btn_languages = yaml.safe_load(file)
+
+    if selected_language not in btn_languages:
+        return btn_languages['en']
+
+    return btn_languages[selected_language]
+
 
 # Run the app
 if __name__ == "__main__":
