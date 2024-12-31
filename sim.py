@@ -36,7 +36,7 @@ app.layout = html.Div(
         html.Div("👨‍👩‍👧‍👦Human ⚔️ AI🤖", id="subtitle"),
 
         # Banner Image
-        html.Img(src="./assets/banner.png",
+        html.Img(src="./assets/banner.jpg",
                  id="banner-image"),
 
         # Content Section
