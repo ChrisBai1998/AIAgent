@@ -42,9 +42,7 @@ button:active {
 
 #submit-button {
     /* background-color: #45b930; */
-    /* background: linear-gradient(45deg, black, rgb(159, 7, 7), rgb(16, 16, 129), rgb(7, 82, 7), rgb(94, 8, 94)); */
-    background: conic-gradient(from 90deg, black, purple, rgb(15, 46, 200), black);
-
+    background: conic-gradient(from 90deg, rgba(0, 0, 0, 0.8) 10%, rgba(128, 0, 128, 0.6) 30%, rgba(15, 46, 200, 0.7) 60%, rgba(0, 0, 0, 0.8) 90%);
 }
 
 #twitter-button {
@@ -222,6 +220,7 @@ button:active {
     height: 10px;
     background-color: rgba(92, 4, 100, 0.8);
     animation: float 6s ease-in-out infinite;
+    box-shadow: 0 0 10px #830476;
   }
   
   .pixel:nth-child(1) {
@@ -311,7 +310,7 @@ button:active {
   @keyframes float {
     0% {
       transform: translateY(0) rotate(0deg);
-      opacity: 0.7; /* Start opacity */
+      opacity: 1; /* Start opacity */
     }
     50% {
       transform: translateY(-50px) rotate(180deg);
@@ -319,6 +318,6 @@ button:active {
     }
     100% {
       transform: translateY(0) rotate(360deg);
-      opacity: 0.9; /* Start opacity */
+      opacity: 1; /* Start opacity */
     }
   }
