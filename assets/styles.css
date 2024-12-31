@@ -175,7 +175,8 @@ button:active {
 }
 
 #user-input {
-    width: 80%;
+    min-width: 60%;
+    flex-grow: 1;
     padding: 10px;
     border-radius: "5px";
     border: 1px solid #e9e5e3;
