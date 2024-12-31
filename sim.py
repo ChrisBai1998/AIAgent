@@ -26,6 +26,15 @@ client = OpenAI(
 app.layout = html.Div(
     id="main-container",
     children=[
+        # floating pixels
+        html.Div(className="pixel"),html.Div(className="pixel"),
+        html.Div(className="pixel"),html.Div(className="pixel"),
+        html.Div(className="pixel"),html.Div(className="pixel"),
+        html.Div(className="pixel"),html.Div(className="pixel"),
+        html.Div(className="pixel"),html.Div(className="pixel"),
+        html.Div(className="pixel"),html.Div(className="pixel"),
+        html.Div(className="pixel"),html.Div(className="pixel"),
+
         # CA Header Section
         html.Div("CA: 0x2170ed0880ac9a755fd29b2688956bd959f933f8", id="ca-header"),
 

@@ -91,13 +91,14 @@ button:active {
 }
 
 #main-container {
-    background-color: #0d0d0d;
+    background-color: #0a0909;
     color: #e0e0e0;
     font-family: "Press Start 2P", monospace;
     padding: 20px;
     border: 2px solid #e9e5e3;
     border-radius: 10px;
     box-shadow: 0 0 20px #e9e5e3;
+    position: relative;
 }
 
 #ca-header {
@@ -213,3 +214,111 @@ button:active {
     padding-bottom: 5px;
     box-shadow: 0 0 20px #950392;
 }
+
+/* floating pixels */
+.pixel {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(92, 4, 100, 0.8);
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .pixel:nth-child(1) {
+    top: 10%;
+    left: 20%;
+    animation-duration: 6s;
+  }
+  
+  .pixel:nth-child(2) {
+    top: 90%;
+    left: 85%;
+    animation-duration: 8s;
+  }
+  
+  .pixel:nth-child(3) {
+    top: 50%;
+    left: 80%;
+    animation-duration: 10s;
+  }
+  
+  .pixel:nth-child(4) {
+    top: 70%;
+    left: 30%;
+    animation-duration: 7s;
+  }
+  
+  .pixel:nth-child(5) {
+    top: 90%;
+    left: 60%;
+    animation-duration: 9s;
+  }
+
+  .pixel:nth-child(6) {
+    top: 15%;
+    left: 80%;
+    animation-duration: 6s;
+  }
+  
+  .pixel:nth-child(7) {
+    top: 40%;
+    left: 10%;
+    animation-duration: 9s;
+  }
+  
+  .pixel:nth-child(8) {
+    top: 60%;
+    left: 90%;
+    animation-duration: 7s;
+  }
+  
+  .pixel:nth-child(9) {
+    top: 80%;
+    left: 12%;
+    animation-duration: 8s;
+  }
+  
+  .pixel:nth-child(10) {
+    top: 10%;
+    left: 90%;
+    animation-duration: 7s;
+  }
+
+  .pixel:nth-child(11) {
+    top: 60%;
+    left: 20%;
+    animation-duration: 6s;
+  }
+
+  .pixel:nth-child(12) {
+    top: 55%;
+    left: 50%;
+    animation-duration: 9s;
+  }
+  
+  .pixel:nth-child(13) {
+    top: 20%;
+    left: 25%;
+    animation-duration: 7s;
+  }
+
+  .pixel:nth-child(14) {
+    top: 65%;
+    left: 65%;
+    animation-duration: 6s;
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0) rotate(0deg);
+      opacity: 0.7; /* Start opacity */
+    }
+    50% {
+      transform: translateY(-50px) rotate(180deg);
+      opacity: 0.4; /* Start opacity */
+    }
+    100% {
+      transform: translateY(0) rotate(360deg);
+      opacity: 0.9; /* Start opacity */
+    }
+  }
