@@ -103,6 +103,18 @@ custom_css = {
         "fontSize": "16px",
         "marginLeft": "10px",
     },
+    "markdown_style": {
+        "color": "#8c12bc",
+        "fontFamily": "Arial, sans-serif",
+        "fontSize": "18px",
+        "lineHeight": "1.6",
+        "whiteSpace": "pre-line",
+        "textAlign": "left",
+        "borderRadius": "10px",
+        "padding": "20px",
+        "fontWeight": "bold",
+        "boxShadow": "0px 4px 6px rgba(0, 0, 0, 0.1)"
+    },
 }
 
 # Layout
@@ -169,7 +181,8 @@ app.layout = html.Div(
                                     our mission? Find the legendary treasure! But watch out for traps and ‘friendly’ monsters. Fail, and the souls of past adventurers might just keep you company!Ready? Hit 'Start' and prove yourself a hero—or the next joke.
                                     Type /start to begin.
                                     ''',
-                                    style={"color": "#8c12bc"},
+                                    style=custom_css["markdown_style"],
+                                    id="dungeon-master-dialogue",
                                 ),
                             ],
                         ),
@@ -185,7 +198,7 @@ app.layout = html.Div(
                                     id="user-input",
                                     type="text",
                                     placeholder="Enter your Choice ...",
-                                    style={"width": "80%", "padding": "10px", "borderRadius": "5px",
+                                    style={"width": "95%", "padding": "10px", "borderRadius": "5px",
                                            "border": "1px solid #ff4500", "color": "#e0e0e0",
                                            "backgroundColor": "#1a1a1a"},
                                 ),
@@ -195,7 +208,7 @@ app.layout = html.Div(
                                     n_clicks=0,
                                 ),
                             ],
-                            style={"display": "flex", "justifyContent": "center", "marginTop": "20px"}
+                            style={"display": "flex", "justifyContent": "flex-start", "marginTop": "20px"}
                         ),
                     ]
                 ),
@@ -270,7 +283,6 @@ app.layout = html.Div(
 
 # Callback to handle "New Game" button click
 @app.callback(
-   
     Output("submit-button", "n_clicks"),
     Output("game-logs", "children"),
     Output("history", "data"),
@@ -289,15 +301,16 @@ def new_game_or_user_input(submit_clicks, game_logs, user_input, history, start_
         submit_clicks-=1
         start_game=True
         game_logs=[
-                    dcc.Markdown(
-                            '''
-                            [Pixel Dungeon Master]: Welcome, brave adventurer, to the unknown! Before you stand six doors—snowfields, shadowy forests, scorching deserts, or perhaps something else. Even I forget sometimes."
-                            In this dungeon, your choices shape your fate. I’ll give you some items, but beware—gifts can lead to trouble too.
-                            our mission? Find the legendary treasure! But watch out for traps and ‘friendly’ monsters. Fail, and the souls of past adventurers might just keep you company!Ready? Hit 'Start' and prove yourself a hero—or the next joke.
-                            Type /start to begin.
-                            ''',
-                            style={"color": "#8c12bc"},
-                            ),
+                    # dcc.Markdown(
+                    #         '''
+                    #         [Pixel Dungeon Master]: Welcome, brave adventurer, to the unknown! Before you stand six doors—snowfields, shadowy forests, scorching deserts, or perhaps something else. Even I forget sometimes."
+                    #         In this dungeon, your choices shape your fate. I’ll give you some items, but beware—gifts can lead to trouble too.
+                    #         our mission? Find the legendary treasure! But watch out for traps and ‘friendly’ monsters. Fail, and the souls of past adventurers might just keep you company!Ready? Hit 'Start' and prove yourself a hero—or the next joke.
+                    #         Type /start to begin.
+                    #         ''',
+                    #         style={"color": "#8c12bc"},
+                    #         ),
+                    "initial conversation from Pixel Dungeon Master",
                     ]
         history=[]
         history = [
@@ -477,17 +490,27 @@ def connect_wallet(n_clicks):
         Output("github-button", "children"),
         Output("twitter-button", "children"),
         Output("connect-wallet-button", "children"),
+        Output("dungeon-master-dialogue", "children"),
     ],
     Input("language-dropdown", "value")
 )
 def update_language(selected_language):
-    with open('button_languages.yml', 'r', encoding='utf-8') as file:
+    with open('./cfgs/button_languages.yml', 'r', encoding='utf-8') as file:
         btn_languages = yaml.safe_load(file)
+    with open('./cfgs/dungeon_master_languages.yml', 'r', encoding='utf-8') as file:
+        dm_languages = yaml.safe_load(file)
 
-    if selected_language not in btn_languages:
-        return btn_languages['en']
+    languages = []
 
-    return btn_languages[selected_language]
+    if selected_language not in btn_languages or selected_language not in dm_languages:
+        languages = btn_languages['en']
+        languages.append(dm_languages['en'])
+        return languages
+    
+    languages = btn_languages[selected_language]
+    languages.append(dm_languages[selected_language])
+
+    return languages
 
 
 # Run the app
