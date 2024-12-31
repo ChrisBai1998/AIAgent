@@ -1,12 +1,12 @@
 /* Base button styles */
 button {
-    background-color: #ff4500;
+    background-color: #6928d9f1;
     color: #e0e0e0;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    box-shadow: 0 0 10px #ff4500;
+    box-shadow: 0 0 5px #e9e5e3;
     text-transform: uppercase;
     margin: 5px;
     transition: all 0.3s ease;
@@ -14,20 +14,42 @@ button {
     font-size: 16px;
     /* font-weight: bold; */
     letter-spacing: 1px;
-    text-shadow: 1px 1px 2px rgba(255, 249, 61, 0.598);
+    text-shadow: 1px 1px 2px rgba(15, 238, 231, 0.598);
+    text-align: justify;
 }
 
 /* Hover effect */
 button:hover {
-    box-shadow: 0 0 30px #ff4500;
+    box-shadow: 0 0 15px #e9e5e3;
     transform: scale(1.07);
 }
 
 /* Active effect */
 button:active {
     background-color: #c03900;
-    box-shadow: 0 0 30px #ff4500;
+    box-shadow: 0 0 30px #e9e5e3;
     transform: scale(0.95);
+}
+
+#button-section {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+#submit-button {
+    background-color: #45b930;
+}
+
+#twitter-button {
+    background-color: #1DA1F2;
+}
+
+#connect-wallet-button {
+    background-color: #FF5722;
 }
 
 /* Dropdown control styles */
@@ -65,5 +87,125 @@ button:active {
     color: #8c8989 !important;
 }
 
+#main-container {
+    background-color: #0d0d0d;
+    color: #e0e0e0;
+    font-family: "Press Start 2P", monospace;
+    padding: 20px;
+    border: 2px solid #e9e5e3;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #e9e5e3;
+}
 
+#ca-header {
+    color: #e0e0e0;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px #e9e5e3;
+    background-color: #1a1a1a;
+    padding: 10px;
+    border-radius: 5px;
+}
 
+#main-header {
+    color: #e9e5e3;
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #e9e5e3;
+}
+
+#subtitle {
+    color: #e9e5e3;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #e9e5e3;
+}
+
+#banner-image {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 0 5px #e9e5e3;
+}
+
+#content-section {
+    margin: 0 auto;
+    max-width: 800px;
+    text-align: center;
+}
+
+#language-selection {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+#language-icon {
+    width: 30px;
+    height: 30px;
+}
+
+#game-logs {
+    background-color: #1a1a1a;
+    color: #76ff03;
+    padding: 10px;
+    border: 1px solid #e9e5e3;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: inset 0 0 10px #e9e5e3;
+    margin-top: 10px;
+    height: auto;
+    min-height: 400px;
+    overflow-y: auto;
+    max-height: 800px;
+}
+
+#user-input {
+    width: 80%;
+    padding: 10px;
+    border-radius: "5px";
+    border: 1px solid #e9e5e3;
+    box-shadow: inset 0 0 10px #e9e5e3;
+    border-radius: 5px;
+    color: #e0e0e0;
+    background-color: #1a1a1a;
+    margin-right: 5px;
+}
+
+#submit-button-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 10px;
+}
+
+#dungeon-master-dialogue {
+    color: #8c12bc;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.6;
+    white-space: pre-line;
+    text-align: left;
+    border-radius: 10px;
+    padding: 20px;
+    font-weight: bold;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+}
+
+#dynamic-img {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 10px;
+    padding-bottom: 5px;
+    box-shadow: 0 0 20px #950392;
+}

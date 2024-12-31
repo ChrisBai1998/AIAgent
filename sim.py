@@ -22,129 +22,34 @@ client = OpenAI(
     api_key=API_KEY
 )
 
-# Custom CSS for a roguelike dungeon pixel aesthetic
-custom_css = {
-    "container": {
-        "backgroundColor": "#0d0d0d",
-        "color": "#e0e0e0",
-        "fontFamily": "Press Start 2P, monospace",
-        "padding": "20px",
-        "border": "2px solid #ff4500",
-        "borderRadius": "10px",
-        "boxShadow": "0 0 20px #ff4500",
-    },
-    "ca_header": {
-        "color": "#e0e0e0",
-        "fontSize": "14px",
-        "fontWeight": "bold",
-        "textAlign": "center",
-        "marginBottom": "10px",
-        "textShadow": "0 0 10px #ff4500",
-        "backgroundColor": "#1a1a1a",
-        "padding": "10px",
-        "borderRadius": "5px",
-        # "border": "1px solid #ff4500",
-    },
-    "header": {
-        "color": "#ff4500",
-        "fontSize": "32px",
-        "fontWeight": "bold",
-        "textAlign": "center",
-        "marginBottom": "20px",
-        "textShadow": "0 0 10px #ff4500",
-    },
-    "subtitle": {
-        "color": "#ff4500",
-        "fontSize": "20px",
-        "fontWeight": "bold",
-        "textAlign": "center",
-        "marginBottom": "20px",
-        "textShadow": "0 0 10px #ff4500",
-    },
-    "content": {
-        "margin": "0 auto",
-        "maxWidth": "800px",
-        "textAlign": "center",
-    },
-    "bottom_button_container": {
-        "marginTop": "20px",
-        "display": "flex",
-        "flexWrap": "wrap",
-        "justifyContent": "center",
-        "gap": "10px",
-    },
-    "textbox": {
-        "backgroundColor": "#1a1a1a",
-        "color": "#76ff03",
-        "padding": "10px",
-        "border": "1px solid #ff4500",
-        "borderRadius": "5px",
-        "fontSize": "16px",
-        "boxShadow": "inset 0 0 10px #ff4500",
-        "marginTop": "20px",
-        "height": "auto",
-        "minHeight": "400px",
-        "overflowY": "auto",
-        "maxHeight": "800px",
-    },
-    "icon_button": {
-        "backgroundColor": "#ff4500",
-        "color": "#e0e0e0",
-        "border": "none",
-        "borderRadius": "50%",
-        "padding": "5px 10px",
-        "marginLeft": "5px",
-        "cursor": "pointer",
-        "boxShadow": "0 0 10px #ff4500",
-    },
-    "link": {
-        "color": "#e0e0e0",
-        "textDecoration": "none",
-        "fontSize": "16px",
-        "marginLeft": "10px",
-    },
-    "markdown_style": {
-        "color": "#8c12bc",
-        "fontFamily": "Arial, sans-serif",
-        "fontSize": "18px",
-        "lineHeight": "1.6",
-        "whiteSpace": "pre-line",
-        "textAlign": "left",
-        "borderRadius": "10px",
-        "padding": "20px",
-        "fontWeight": "bold",
-        "boxShadow": "0px 4px 6px rgba(0, 0, 0, 0.1)"
-    },
-}
-
 # Layout
 app.layout = html.Div(
-    style=custom_css["container"],
+    id="main-container",
     children=[
-        # CA Header Section (moved to the top left)
-        html.Div("CA: 0x2170ed0880ac9a755fd29b2688956bd959f933f8", style=custom_css["ca_header"]),
+        # CA Header Section
+        html.Div("CA: 0x2170ed0880ac9a755fd29b2688956bd959f933f8", id="ca-header"),
 
         # Main Header Section
-        html.Div("Pixel Dungeon", style=custom_css["header"]),
+        html.Div("Pixel Dungeon", id="main-header"),
+
         # Subtitle Section
-        html.Div("👨‍👩‍👧‍👦Human ⚔️ AI🤖", style=custom_css["subtitle"]),
+        html.Div("👨‍👩‍👧‍👦Human ⚔️ AI🤖", id="subtitle"),
 
         # Banner Image
-        html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/assets/banner.png",
-                 style={"width": "100%", "maxWidth": "800px", "borderRadius": "10px", "marginBottom": "20px", 
-                        "display": "block", "marginLeft": "auto", "marginRight": "auto", "box-shadow": "0 0 20px #ff4500"}),
+        html.Img(src="./assets/banner.png",
+                 id="banner-image"),
 
-        # Content Section (centered)
+        # Content Section
         html.Div(
-            style=custom_css["content"],
+            id="content-section",
             children=[
-                # languages
+                # Languages Section
                 html.Div(
-                    style={'display': 'flex', 'align-items': 'center', 'justify-content': 'flex-end', 'gap': '10px'},
+                    id="language-selection",
                     children=[
                         html.Img(
-                            src="assets/language.png",  # Replace with the actual image path
-                            style={'width': '30px', 'height': '30px'}  # Set size of the image
+                            src="./assets/language.png",
+                            id="language-icon"
                         ),
                         
                         # Dropdown
@@ -166,13 +71,12 @@ app.layout = html.Div(
                     ]
                 ),
 
-                # Game Logs Section (Scrollable)
+                # Game Logs Section
                 html.Div(
                     id="game-logs",
-                    style=custom_css["textbox"],
                     children=[
                         html.Div(
-                            style=custom_css["bottom_button_container"],
+                            id="game-master-dialogue",
                             children=[
                                 dcc.Markdown(
                                     '''
@@ -181,7 +85,6 @@ app.layout = html.Div(
                                     our mission? Find the legendary treasure! But watch out for traps and ‘friendly’ monsters. Fail, and the souls of past adventurers might just keep you company!Ready? Hit 'Start' and prove yourself a hero—or the next joke.
                                     Type /start to begin.
                                     ''',
-                                    style=custom_css["markdown_style"],
                                     id="dungeon-master-dialogue",
                                 ),
                             ],
@@ -191,6 +94,7 @@ app.layout = html.Div(
 
                 # User Input Section
                 html.Div(
+                    id="user-input-section",
                     children=[
                         html.Div(
                             children=[
@@ -198,9 +102,6 @@ app.layout = html.Div(
                                     id="user-input",
                                     type="text",
                                     placeholder="Enter your Choice ...",
-                                    style={"width": "95%", "padding": "10px", "borderRadius": "5px",
-                                           "border": "1px solid #ff4500", "color": "#e0e0e0",
-                                           "backgroundColor": "#1a1a1a"},
                                 ),
                                 html.Button(
                                     "Submit",
@@ -208,17 +109,14 @@ app.layout = html.Div(
                                     n_clicks=0,
                                 ),
                             ],
-                            style={"display": "flex", "justifyContent": "flex-start", "marginTop": "20px"}
+                            id="submit-button-container",
                         ),
                     ]
                 ),
 
-                # Placeholder for output
-                html.Div(id="new-game-output", style={"marginTop": "20px", "color": "white"}),
-
                 # Rank Button and Whitepaper Link
                 html.Div(
-                    style={"width": "100%", "maxWidth": "800px", "margin": "0 auto", "display": "flex", "flexWrap": "wrap", "justifyContent": "flex-start"},
+                    id="button-section",
                     children=[
                         html.Button(
                             "Rank",
@@ -240,7 +138,7 @@ app.layout = html.Div(
                             n_clicks=0,
                             style={"backgroundColor": "#1DA1F2"},
                             children=[
-                                html.Img(src="https://raw.githubusercontent.com/ChrisBai1998/AIAgent/refs/heads/main/assets/twitter-logo.png", style={"width": "20px", "marginRight": "5px"}),
+                                html.Img(src="./assets/twitter-logo.png", alt="twi-logo", style={"width": "20px", "marginRight": "5px"}),
                                 "Twitter"
                             ],
                         ),
@@ -252,11 +150,6 @@ app.layout = html.Div(
                         ),
                     ],
                 ),
-                # Placeholder for whitepaper output
-                html.Div(id="whitepaper-output", style={"marginTop": "20px", "color": "white"}),
-                html.Div(id="github-output", style={"marginTop": "20px", "color": "white"}),
-                html.Div(id="twitter-output", style={"marginTop": "20px", "color": "white"}),
-                html.Div(id="connect-wallet-output", style={"marginTop": "20px", "color": "white"}),
             ],
         ),
         #save conversation
@@ -500,18 +393,42 @@ def update_language(selected_language):
     with open('./cfgs/dungeon_master_languages.yml', 'r', encoding='utf-8') as file:
         dm_languages = yaml.safe_load(file)
 
-    languages = []
+    languages = btn_languages['en']
+    languages.append(dm_languages['en'])
 
     if selected_language not in btn_languages or selected_language not in dm_languages:
-        languages = btn_languages['en']
-        languages.append(dm_languages['en'])
-        return languages
+        return icon_helper(languages)
     
     languages = btn_languages[selected_language]
     languages.append(dm_languages[selected_language])
 
-    return languages
+    return icon_helper(languages)
 
+def icon_helper(elem_text_list):
+    # hardcoded icons: submit, rank, whitepaper, github, twitter, wallet, dialogue
+    icon_list, n = [], 0
+    # submit
+    icon_list.append("🚀"+elem_text_list[n])
+    n += 1
+    # rank
+    icon_list.append("🏅"+elem_text_list[n])
+    n += 1
+    # whitepaper
+    icon_list.append("📄"+elem_text_list[n])
+    n += 1
+    # github
+    icon_list.append([html.Img(src="assets/github-logo.png", alt="Twitter Logo", style={"width": "20px", "marginRight": "5px"}), elem_text_list[n]])
+    n += 1
+    # twitter
+    icon_list.append([html.Img(src="assets/twitter-logo.png", alt="Twitter Logo", style={"width": "20px", "marginRight": "5px"}), elem_text_list[n]])
+    n += 1
+    # wallet
+    icon_list.append("🪙"+elem_text_list[n])
+    n += 1
+    # dialogue
+    icon_list.append(elem_text_list[n])
+
+    return icon_list
 
 # Run the app
 if __name__ == "__main__":
